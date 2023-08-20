@@ -28,43 +28,29 @@ public class PacketBase : ISerializable
 
     public static PacketBase? Deserialize(ReadOnlySpan<byte> bytes, PacketBase packet)
     {
-        int index = 0;
-        packet.Sequence = BitConverter.ToInt32(bytes);
-        index += sizeof(int);
-        if (index >= bytes.Length)
-        {
-            return null;
-        }
+        int startIndex = 0;
+        int endIndex = startIndex + 4;
+        packet.Sequence = BitConverter.ToInt32(bytes[startIndex..endIndex]);
 
-        packet.PacketType = (PacketType)bytes[index];
-        index += sizeof(byte);
-        if (index >= bytes.Length)
-        {
-            return null;
-        }
+        startIndex = endIndex;
+        endIndex = startIndex + 1;
+        packet.PacketType = (PacketType)bytes[startIndex];
 
-        packet.TotalLength = BitConverter.ToInt64(bytes[index..]);
-        index += sizeof(long);
-        if (index >= bytes.Length)
-        {
-            return null;
-        }
+        startIndex = endIndex;
+        endIndex = startIndex + 8;
+        packet.TotalLength = BitConverter.ToInt64(bytes[startIndex..endIndex]);
 
-        packet.IsFragmented = BitConverter.ToBoolean(bytes[index..]);
-        index += sizeof(bool);
-        if (index >= bytes.Length)
-        {
-            return null;
-        }
+        startIndex = endIndex;
+        endIndex = startIndex + 1;
+        packet.IsFragmented = BitConverter.ToBoolean(bytes[startIndex..endIndex]);
 
-        packet.Identifier = new byte[16];
-        var dest = packet.Identifier.AsSpan();
-        bytes[index..].CopyTo(dest);
-        index += sizeof(byte) * 16;
-        if (index >= bytes.Length)
-        {
-            return null;
-        }
+        startIndex = endIndex;
+        endIndex = startIndex + 16;
+        packet.Identifier = bytes[startIndex..endIndex].ToArray();
+
+        startIndex = endIndex;
+        endIndex = startIndex + 2;
+        packet.Length = BitConverter.ToInt16(bytes[startIndex..endIndex]);
 
         return packet;
     }

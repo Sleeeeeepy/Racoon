@@ -15,7 +15,14 @@ namespace Racoon.Tests.Serialize
             var packet = new PacketBase(1, body, body.Length, Guid.NewGuid().ToByteArray());
             var buffer = new byte[PacketBase.HeaderSize];
             var result = packet.Serialize(buffer, 0);
+
+            var deserialized = PacketBase.Deserialize(buffer, new PacketBase());
             Assert.True(result);
+            Assert.Equal(packet.Sequence, deserialized?.Sequence);
+            Assert.Equal(packet.PacketType, deserialized?.PacketType);
+            Assert.Equal(packet.TotalLength, deserialized?.TotalLength);
+            Assert.Equal(packet.Identifier, deserialized?.Identifier);
+            Assert.Equal(packet.Length, deserialized?.Length);
         }
     }
 }
