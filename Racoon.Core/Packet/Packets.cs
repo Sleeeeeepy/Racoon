@@ -111,21 +111,36 @@ public class NormalPacket : IPacket, ISerializable
 
     public NormalPacket() { }
 
-    public static NormalPacket Deserialize(ReadOnlySpan<byte> bytes)
+    public NormalPacket(byte[] payload)
     {
-        NormalPacket packet = new()
-        {
-            Payload = bytes.ToArray()
-        };
+        Payload = new byte[payload.Length];
+        Array.Copy(payload, Payload, Payload.Length);
+    }
+
+    public static NormalPacket Deserialize(ReadOnlySpan<byte> bytes, NormalPacket packet)
+    {
+        packet.Payload = bytes.ToArray();
         return packet;
     }
 
     public bool Serialize(byte[] buffer, int offset)
     {
-        int maxLength = buffer.Length - (offset + PacketBase.HeaderSize);
-        int copyLength = Math.Min(Payload.Length, maxLength);
-        Array.Copy(Payload, 0, buffer, offset + PacketBase.HeaderSize, copyLength);
-        return true;
+        try
+        {
+            return Payload.AsSpan().TryCopyTo(buffer.AsSpan(offset));
+        } 
+        catch (ArgumentOutOfRangeException)
+        {
+            return false;
+        } 
+        catch (IndexOutOfRangeException)
+        {
+            return false;
+        }
+        // int maxLength = buffer.Length - (offset + PacketBase.HeaderSize);
+        // int copyLength = Math.Min(Payload.Length, maxLength);
+        // Array.Copy(Payload, 0, buffer, offset + PacketBase.HeaderSize, copyLength);
+        // return true;
     }
 }
 
