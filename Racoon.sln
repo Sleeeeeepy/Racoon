@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Racoon.Core", "Racoon.Core\Racoon.Core.csproj", "{02DF4615-2867-4C93-9220-AA7F853D201E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Racoon.Tests", "Racoon.Tests\Racoon.Tests.csproj", "{8847F32A-DB59-4F64-84F6-F72E91F34335}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "솔루션 항목", "솔루션 항목", "{2672CD8B-4FEF-4CEE-907C-96F560903287}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{02DF4615-2867-4C93-9220-AA7F853D201E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02DF4615-2867-4C93-9220-AA7F853D201E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02DF4615-2867-4C93-9220-AA7F853D201E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02DF4615-2867-4C93-9220-AA7F853D201E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8847F32A-DB59-4F64-84F6-F72E91F34335}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8847F32A-DB59-4F64-84F6-F72E91F34335}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8847F32A-DB59-4F64-84F6-F72E91F34335}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8847F32A-DB59-4F64-84F6-F72E91F34335}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {045618D4-9F7B-42C0-896C-288352776974}
+	EndGlobalSection
+EndGlobal
