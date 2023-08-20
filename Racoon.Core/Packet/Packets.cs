@@ -28,31 +28,42 @@ public class PacketBase : ISerializable
 
     public static PacketBase? Deserialize(ReadOnlySpan<byte> bytes, PacketBase packet)
     {
-        int startIndex = 0;
-        int endIndex = startIndex + 4;
-        packet.Sequence = BitConverter.ToInt32(bytes[startIndex..endIndex]);
+        try
+        {
+            int startIndex = 0;
+            int endIndex = startIndex + 4;
+            packet.Sequence = BitConverter.ToInt32(bytes[startIndex..endIndex]);
 
-        startIndex = endIndex;
-        endIndex = startIndex + 1;
-        packet.PacketType = (PacketType)bytes[startIndex];
+            startIndex = endIndex;
+            endIndex = startIndex + 1;
+            packet.PacketType = (PacketType)bytes[startIndex];
 
-        startIndex = endIndex;
-        endIndex = startIndex + 8;
-        packet.TotalLength = BitConverter.ToInt64(bytes[startIndex..endIndex]);
+            startIndex = endIndex;
+            endIndex = startIndex + 8;
+            packet.TotalLength = BitConverter.ToInt64(bytes[startIndex..endIndex]);
 
-        startIndex = endIndex;
-        endIndex = startIndex + 1;
-        packet.IsFragmented = BitConverter.ToBoolean(bytes[startIndex..endIndex]);
+            startIndex = endIndex;
+            endIndex = startIndex + 1;
+            packet.IsFragmented = BitConverter.ToBoolean(bytes[startIndex..endIndex]);
 
-        startIndex = endIndex;
-        endIndex = startIndex + 16;
-        packet.Identifier = bytes[startIndex..endIndex].ToArray();
+            startIndex = endIndex;
+            endIndex = startIndex + 16;
+            packet.Identifier = bytes[startIndex..endIndex].ToArray();
 
-        startIndex = endIndex;
-        endIndex = startIndex + 2;
-        packet.Length = BitConverter.ToInt16(bytes[startIndex..endIndex]);
+            startIndex = endIndex;
+            endIndex = startIndex + 2;
+            packet.Length = BitConverter.ToInt16(bytes[startIndex..endIndex]);
 
-        return packet;
+            return packet;
+        } 
+        catch (ArgumentOutOfRangeException)
+        {
+            return null;
+        } 
+        catch (IndexOutOfRangeException)
+        {
+            return null;
+        }
     }
 
     public bool Serialize(byte[] buffer, int offset)
