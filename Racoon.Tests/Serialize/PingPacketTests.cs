@@ -8,7 +8,7 @@ public class PingPacketTests
         var packet = new PingPacket(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
         var buffer = new byte[8];
         var result = packet.Serialize(buffer, 0);
-        var deserialized = PingPacket.Deserialize(buffer);
+        var deserialized = PingPacket.Deserialize(buffer, new PingPacket());
 
         Assert.Equal(packet.RequestTime, deserialized?.RequestTime);
     }
@@ -19,7 +19,7 @@ public class PingPacketTests
         var packet = new PingPacket(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
         var buffer = new byte[7];
         var result = packet.Serialize(buffer, 0);
-        var deserialized = PingPacket.Deserialize(buffer);
+        var deserialized = PingPacket.Deserialize(buffer, new PingPacket());
 
         Assert.False(result);
         Assert.Null(deserialized);
@@ -31,7 +31,7 @@ public class PingPacketTests
         var packet = new PingPacket(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
         var buffer = new byte[100];
         var result = packet.Serialize(buffer, 0);
-        var deserialized = PingPacket.Deserialize(buffer);
+        var deserialized = PingPacket.Deserialize(buffer, new PingPacket());
 
         Assert.Equal(packet.RequestTime, deserialized?.RequestTime);
     }

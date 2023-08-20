@@ -11,7 +11,7 @@ public class HandshakePacketTests
 
         byte[] buffer = new byte[512];
         expected.Serialize(buffer, 0);
-        HandshakePacket? actual = HandshakePacket.Deserialize(buffer);
+        HandshakePacket? actual = HandshakePacket.Deserialize(buffer, new HandshakePacket());
 
         Assert.Equal(expected.KeyLength, actual?.KeyLength);
         Assert.Equal(expected.PublicKey, actual?.PublicKey);
@@ -28,7 +28,7 @@ public class HandshakePacketTests
         byte[] buffer = new byte[publicKey.Length + iv.Length + 3];
 
         var result = original.Serialize(buffer, 0);
-        HandshakePacket? actual = HandshakePacket.Deserialize(buffer);
+        HandshakePacket? actual = HandshakePacket.Deserialize(buffer, new HandshakePacket());
 
         Assert.False(result);
         Assert.Null(actual);
@@ -43,7 +43,7 @@ public class HandshakePacketTests
         byte[] buffer = new byte[publicKey.Length + iv.Length + 4];
 
         var result = expected.Serialize(buffer, 0);
-        HandshakePacket? actual = HandshakePacket.Deserialize(buffer);
+        HandshakePacket? actual = HandshakePacket.Deserialize(buffer, new HandshakePacket());
 
         Assert.Equal(expected.KeyLength, actual?.KeyLength);
         Assert.Equal(expected.PublicKey, actual?.PublicKey);
@@ -63,7 +63,7 @@ public class HandshakePacketTests
         // Malicious user attacks
         buffer[0] = 0xFF;
         buffer[1] = 0x0F;
-        HandshakePacket? actual = HandshakePacket.Deserialize(buffer);
+        HandshakePacket? actual = HandshakePacket.Deserialize(buffer, new HandshakePacket());
 
         Assert.Null(actual);
     }

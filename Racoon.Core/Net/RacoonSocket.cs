@@ -38,7 +38,7 @@ namespace Racoon.Core.Net
             var handle = (byte[] dgram) =>
             {
                 var decoded = BlockEncoder.Decode(dgram);
-                var header = PacketBase.Deserialize(decoded);
+                var header = PacketBase.Deserialize(decoded, new PacketBase());
                 
                 if (header is null)
                 {

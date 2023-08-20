@@ -26,9 +26,8 @@ public class PacketBase : ISerializable
         this.IsFragmented = TotalLength == Length;
     }
 
-    public static PacketBase? Deserialize(ReadOnlySpan<byte> bytes)
+    public static PacketBase? Deserialize(ReadOnlySpan<byte> bytes, PacketBase packet)
     {
-        PacketBase packet = new();
         int index = 0;
         packet.Sequence = BitConverter.ToInt32(bytes);
         index += sizeof(int);
@@ -152,11 +151,10 @@ public class HandshakePacket : IPacket, ISerializable
         this.InitializeVectorLength = (short)initializeVector.Length;
     }
 
-    public static HandshakePacket? Deserialize(ReadOnlySpan<byte> bytes)
+    public static HandshakePacket? Deserialize(ReadOnlySpan<byte> bytes, HandshakePacket packet)
     {
         try
         {
-            HandshakePacket packet = new();
             int startIndex = 0;
             int endIndex = 2;
             packet.KeyLength = BitConverter.ToInt16(bytes[startIndex..endIndex]);
@@ -226,11 +224,10 @@ public class PingPacket : IPacket, ISerializable
         RequestTime = DateTimeOffset.FromUnixTimeMilliseconds(requestTime);
     }
 
-    public static PingPacket? Deserialize(ReadOnlySpan<byte> bytes)
+    public static PingPacket? Deserialize(ReadOnlySpan<byte> bytes, PingPacket packet)
     {
         try
         {
-            var packet = new PingPacket();
             packet.RequestTime = DateTimeOffset.FromUnixTimeMilliseconds(BitConverter.ToInt64(bytes));
             return packet;
         }
@@ -283,11 +280,10 @@ public class PongPacket : IPacket, ISerializable
         ResponseTime = responseTime;
     }
 
-    public static PongPacket? Deserialize(ReadOnlySpan<byte> bytes)
+    public static PongPacket? Deserialize(ReadOnlySpan<byte> bytes, PongPacket packet)
     {
         try
         {
-            var packet = new PongPacket();
             int startIndex = 0;
             packet.ResponseTime = DateTimeOffset.FromUnixTimeMilliseconds(BitConverter.ToInt64(bytes));
 
