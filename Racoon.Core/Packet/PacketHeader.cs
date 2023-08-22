@@ -25,6 +25,16 @@ public class PacketHeader : ISerializable, IDeserializable<PacketHeader>
         this.IsFragmented = TotalLength == Length;
     }
 
+    public PacketHeader(int sequence, PacketType packetType, long totalLength, bool isFragmented, byte[] identifier, short length)
+    {
+        Sequence = sequence;
+        PacketType = packetType;
+        TotalLength = totalLength;
+        IsFragmented = isFragmented;
+        Identifier = identifier;
+        Length = length;
+    }
+
     public static PacketHeader? Deserialize(ReadOnlySpan<byte> bytes, PacketHeader packet)
     {
         try

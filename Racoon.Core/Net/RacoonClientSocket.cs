@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Racoon.Core.Correction;
 using Racoon.Core.Packet;
 using Racoon.Core.Util;
+using Racoon.Core.Enums;
 
 namespace Racoon.Core.Net
 {
@@ -44,6 +45,19 @@ namespace Racoon.Core.Net
 
         public void Connect()
         {
+            try
+            {
+                connect();
+            } 
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex);
+                Debug.WriteLine("An error occurred while connecting.");
+            }
+        }
+
+        private void connect()
+        {
             var iv = new byte[16];
             RandomNumberGenerator.Create().GetNonZeroBytes(iv);
             HandshakePacket body = new(context.KeyExchange.PublicKey, iv);
@@ -57,7 +71,15 @@ namespace Racoon.Core.Net
 
             var datagram = udpClient.Receive(ref remoteEndpoint);
             var decodedBytes = BlockEncoder.Decode(datagram.AsSpan(PacketHeader.HeaderSize));
-            var recvHeader = PacketHeader.Deserialize(decodedBytes, new());
+            var recvHeader = PacketHeader.Deserialize(datagram, new());
+
+            if (recvHeader?.PacketType == PacketType.ConnectionRefuse)
+            {
+                Debug.WriteLine("Connection refuse");
+                Console.WriteLine("Connection refuse");
+                return;
+            }
+
             var recvBody = HandshakePacket.Deserialize(decodedBytes[PacketHeader.HeaderSize..], new());
 
             if (recvHeader is null || recvBody is null)
