@@ -40,7 +40,7 @@ namespace Racoon.Core.Packet
             int endIndex = PacketBase.HeaderSize;
 
             bool result = true;
-            result &= PacketBase.Deserialize(buffer, header) == null;
+            result &= PacketBase.Deserialize(buffer, header) != null;
 
             int packetLength = PacketBase.HeaderSize + header.Length;
             if (buffer.Length < packetLength)
@@ -50,7 +50,7 @@ namespace Racoon.Core.Packet
 
             startIndex = endIndex;
             endIndex = startIndex + header.Length;
-            result &= T.Deserialize(buffer.AsSpan()[startIndex..endIndex], body) == null;
+            result &= T.Deserialize(buffer.AsSpan()[startIndex..endIndex], body) != null;
 
             return result;
         }
