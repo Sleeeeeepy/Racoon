@@ -76,14 +76,14 @@ public class HandshakePacketTests
         byte[] publicKey = { 48, 129, 155, 48, 16, 6, 7, 42, 134, 72, 206, 61, 2, 1, 6, 5, 43, 129, 4, 0, 35, 3, 129, 134, 0, 4, 1, 199, 114, 138, 207, 52, 7, 159, 81, 132, 86, 195, 124, 30, 119, 140, 179, 169, 148, 68, 196, 109, 24, 205, 7, 199, 135, 238, 214, 4, 177, 115, 9, 42, 197, 1, 181, 83, 203, 2, 212, 146, 220, 77, 65, 52, 166, 25, 234, 93, 140, 16, 71, 71, 129, 153, 76, 166, 99, 145, 126, 233, 190, 31, 170, 12, 1, 191, 2, 103, 161, 206, 230, 29, 34, 230, 215, 79, 114, 100, 226, 131, 113, 39, 223, 56, 218, 49, 194, 129, 191, 188, 199, 202, 48, 25, 193, 123, 112, 17, 35, 225, 199, 55, 12, 93, 176, 17, 85, 251, 142, 162, 192, 116, 209, 234, 240, 131, 152, 50, 154, 111, 206, 129, 209, 193, 236, 89, 62, 164, 103, 255 };
         byte[] iv = { 131, 123, 239, 185, 222, 109, 240, 185, 164, 3, 148, 67, 175, 178, 155, 126 };
         var body = new HandshakePacket(publicKey, iv);
-        var header = new PacketBase(0, body, body.Length, Guid.NewGuid().ToByteArray());
+        var header = new PacketHeader(0, body, body.Length, Guid.NewGuid().ToByteArray());
 
         var packetLength = header.Length + body.Length;
         var buffer = new byte[packetLength];
 
         SerializationHelper.Serialize(buffer, header, body);
 
-        var deserializedHeader = new PacketBase();
+        var deserializedHeader = new PacketHeader();
         var deserializedBody = new HandshakePacket();
         SerializationHelper.Deserialize(buffer, deserializedHeader, deserializedBody);
 

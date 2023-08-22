@@ -37,9 +37,9 @@ public class NormalPacket : IPacket, ISerializable, IDeserializable<NormalPacket
         {
             return false;
         }
-        // int maxLength = buffer.Length - (offset + PacketBase.HeaderSize);
+        // int maxLength = buffer.Length - (offset + PacketHeader.HeaderSize);
         // int copyLength = Math.Min(Payload.Length, maxLength);
-        // Array.Copy(Payload, 0, buffer, offset + PacketBase.HeaderSize, copyLength);
+        // Array.Copy(Payload, 0, buffer, offset + PacketHeader.HeaderSize, copyLength);
         // return true;
     }
 }

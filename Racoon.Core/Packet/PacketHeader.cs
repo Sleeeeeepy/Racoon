@@ -3,7 +3,7 @@
 using System;
 using Racoon.Core.Enums;
 
-public class PacketBase : ISerializable, IDeserializable<PacketBase>
+public class PacketHeader : ISerializable, IDeserializable<PacketHeader>
 {
     public int Sequence { get; protected set; }
     public PacketType PacketType { get; protected set; }
@@ -13,9 +13,9 @@ public class PacketBase : ISerializable, IDeserializable<PacketBase>
     public short Length { get; protected set; }
     public static short HeaderSize = 32;
 
-    public PacketBase() { }
+    public PacketHeader() { }
 
-    public PacketBase(int sequence, IPacket packet, long totalLength, byte[] identifier)
+    public PacketHeader(int sequence, IPacket packet, long totalLength, byte[] identifier)
     {
         this.Sequence = sequence;
         this.PacketType = packet.PacketType;
@@ -25,7 +25,7 @@ public class PacketBase : ISerializable, IDeserializable<PacketBase>
         this.IsFragmented = TotalLength == Length;
     }
 
-    public static PacketBase? Deserialize(ReadOnlySpan<byte> bytes, PacketBase packet)
+    public static PacketHeader? Deserialize(ReadOnlySpan<byte> bytes, PacketHeader packet)
     {
         try
         {

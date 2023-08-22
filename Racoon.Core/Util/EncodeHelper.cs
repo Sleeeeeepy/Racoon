@@ -17,18 +17,18 @@ public class EncodeHelper
         return fitSize;
     }
 
-    public static int GetBlockSize(PacketBase header)
+    public static int GetBlockSize(PacketHeader header)
     {
-        return PacketBase.HeaderSize + GetBlockSize(header.Length);
+        return PacketHeader.HeaderSize + GetBlockSize(header.Length);
     }
 
-    public static void EncodeWithoutHeader(byte[] buffer, PacketBase header)
+    public static void EncodeWithoutHeader(byte[] buffer, PacketHeader header)
     {
-        BlockEncoder.Encode(buffer.AsSpan().Slice(PacketBase.HeaderSize, header.Length), buffer.AsSpan()[PacketBase.HeaderSize..]);
+        BlockEncoder.Encode(buffer.AsSpan().Slice(PacketHeader.HeaderSize, header.Length), buffer.AsSpan()[PacketHeader.HeaderSize..]);
     }
 
-    public static void DecodeWithoutHeader(byte[] buffer, PacketBase header)
+    public static void DecodeWithoutHeader(byte[] buffer, PacketHeader header)
     {
-        BlockEncoder.Decode(buffer.AsSpan().Slice(PacketBase.HeaderSize, header.Length), buffer.AsSpan()[PacketBase.HeaderSize..]);
+        BlockEncoder.Decode(buffer.AsSpan().Slice(PacketHeader.HeaderSize, header.Length), buffer.AsSpan()[PacketHeader.HeaderSize..]);
     }
 }

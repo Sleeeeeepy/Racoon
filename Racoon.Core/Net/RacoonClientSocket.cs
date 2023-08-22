@@ -47,7 +47,7 @@ namespace Racoon.Core.Net
             var iv = new byte[16];
             RandomNumberGenerator.Create().GetNonZeroBytes(iv);
             HandshakePacket body = new(context.KeyExchange.PublicKey, iv);
-            PacketBase header = new(context.Sequence, body, body.Length, Identifier);
+            PacketHeader header = new(context.Sequence, body, body.Length, Identifier);
 
             int bufferSize = EncodeHelper.GetBlockSize(header);
             var buffer = new byte[bufferSize];
@@ -56,9 +56,9 @@ namespace Racoon.Core.Net
             udpClient.Send(buffer, context.LastIP, context.LastPort);
 
             var datagram = udpClient.Receive(ref remoteEndpoint);
-            var decodedBytes = BlockEncoder.Decode(datagram.AsSpan(PacketBase.HeaderSize));
-            var recvHeader = PacketBase.Deserialize(decodedBytes, new());
-            var recvBody = HandshakePacket.Deserialize(decodedBytes[PacketBase.HeaderSize..], new());
+            var decodedBytes = BlockEncoder.Decode(datagram.AsSpan(PacketHeader.HeaderSize));
+            var recvHeader = PacketHeader.Deserialize(decodedBytes, new());
+            var recvBody = HandshakePacket.Deserialize(decodedBytes[PacketHeader.HeaderSize..], new());
 
             if (recvHeader is null || recvBody is null)
             {

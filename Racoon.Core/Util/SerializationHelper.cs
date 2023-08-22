@@ -10,7 +10,7 @@ namespace Racoon.Core.Util;
 
 public static class SerializationHelper
 {
-    public static bool Serialize(byte[] buffer, PacketBase header, IPacket body)
+    public static bool Serialize(byte[] buffer, PacketHeader header, IPacket body)
     {
         if (body is not ISerializable)
         {
@@ -25,25 +25,25 @@ public static class SerializationHelper
 
         bool result = true;
         result &= header.Serialize(buffer, 0);
-        result &= ((ISerializable)body).Serialize(buffer, PacketBase.HeaderSize);
+        result &= ((ISerializable)body).Serialize(buffer, PacketHeader.HeaderSize);
 
         return result;
     }
 
-    public static bool Deserialize<T>(byte[] buffer, PacketBase header, T body) where T : IDeserializable<T>
+    public static bool Deserialize<T>(byte[] buffer, PacketHeader header, T body) where T : IDeserializable<T>
     {
-        if (buffer.Length < PacketBase.HeaderSize)
+        if (buffer.Length < PacketHeader.HeaderSize)
         {
             return false;
         }
 
         int startIndex = 0;
-        int endIndex = PacketBase.HeaderSize;
+        int endIndex = PacketHeader.HeaderSize;
 
         bool result = true;
-        result &= PacketBase.Deserialize(buffer, header) != null;
+        result &= PacketHeader.Deserialize(buffer, header) != null;
 
-        int packetLength = PacketBase.HeaderSize + header.Length;
+        int packetLength = PacketHeader.HeaderSize + header.Length;
         if (buffer.Length < packetLength)
         {
             return false;

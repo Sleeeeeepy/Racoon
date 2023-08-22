@@ -9,7 +9,7 @@ namespace Racoon.Core.Net
 {
     public class DefaultPacketHandler : IPacketHandler
     {
-        public void HandlePacket(ConnectionContext context, PacketBase header, IPacket body)
+        public void HandlePacket(ConnectionContext context, PacketHeader header, IPacket body)
         {
             return;
         }

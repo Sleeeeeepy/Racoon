@@ -46,16 +46,16 @@ namespace Racoon.Core.Net
             }
 
             // 헤더 만큼도 못받아오면 로스
-            if (datagram.Length < PacketBase.HeaderSize)
+            if (datagram.Length < PacketHeader.HeaderSize)
             {
                 return;
             }
 
             var handle = (byte[] dgram) =>
             {
-                var header = PacketBase.Deserialize(dgram, new PacketBase());
+                var header = PacketHeader.Deserialize(dgram, new PacketHeader());
                 Console.WriteLine(header?.PacketType);
-                BlockEncoder.Decode(dgram.AsSpan()[PacketBase.HeaderSize..]);
+                BlockEncoder.Decode(dgram.AsSpan()[PacketHeader.HeaderSize..]);
                 if (header is null)
                 {
                     Debug.WriteLine($"[{DateTime.UtcNow}] {remoteEndpoint.Address} - Header is null.");
@@ -65,7 +65,7 @@ namespace Racoon.Core.Net
                 IPacket? body = default;
                 if (header.PacketType == PacketType.ConnectionRequest)
                 {
-                    body = HandshakePacket.Deserialize(dgram.AsSpan()[PacketBase.HeaderSize..], new HandshakePacket());
+                    body = HandshakePacket.Deserialize(dgram.AsSpan()[PacketHeader.HeaderSize..], new HandshakePacket());
                     if (body is null) 
                         return;
                     beginConnection(remoteEndpoint.Address.ToString(), remoteEndpoint.Port, header.Identifier, (HandshakePacket)body);
@@ -86,17 +86,17 @@ namespace Racoon.Core.Net
                     return;
                 }
 
-                var dcrypted = context.AesCryptography.Decrypt(dgram[PacketBase.HeaderSize..]);
+                var dcrypted = context.AesCryptography.Decrypt(dgram[PacketHeader.HeaderSize..]);
                 switch (header.PacketType)
                 {
                     case PacketType.Ping:
-                        body = PingPacket.Deserialize(dcrypted.AsSpan()[PacketBase.HeaderSize..], new PingPacket());
+                        body = PingPacket.Deserialize(dcrypted.AsSpan()[PacketHeader.HeaderSize..], new PingPacket());
                         break;
                     case PacketType.Pong:
-                        body = PongPacket.Deserialize(dcrypted.AsSpan()[PacketBase.HeaderSize..], new PongPacket());
+                        body = PongPacket.Deserialize(dcrypted.AsSpan()[PacketHeader.HeaderSize..], new PongPacket());
                         break;
                     case PacketType.Normal:
-                        body = NormalPacket.Deserialize(dcrypted.AsSpan()[PacketBase.HeaderSize..], new NormalPacket());
+                        body = NormalPacket.Deserialize(dcrypted.AsSpan()[PacketHeader.HeaderSize..], new NormalPacket());
                         packetHandler.HandlePacket(context, header, body);
                         break;
                 }
@@ -127,7 +127,7 @@ namespace Racoon.Core.Net
             contexts.Add(context.Identifier, context);
 
             HandshakePacket sendPacket = new(context.KeyExchange.PublicKey, receivedPacket.InitializeVector);
-            PacketBase header = new(context.Sequence, sendPacket, sendPacket.Length, Identifier);
+            PacketHeader header = new(context.Sequence, sendPacket, sendPacket.Length, Identifier);
 
             // TODO: global send buffer 이용하기
             var buffer = new byte[EncodeHelper.GetBlockSize(header)];

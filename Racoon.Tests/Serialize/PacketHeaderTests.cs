@@ -12,11 +12,11 @@ namespace Racoon.Tests.Serialize
         public void PacketHeaderSerializeTest()
         {
             var body = new PingPacket(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
-            var packet = new PacketBase(1, body, body.Length, Guid.NewGuid().ToByteArray());
+            var packet = new PacketHeader(1, body, body.Length, Guid.NewGuid().ToByteArray());
             var buffer = new byte[100];
             var result = packet.Serialize(buffer, 0);
 
-            var deserialized = PacketBase.Deserialize(buffer, new PacketBase());
+            var deserialized = PacketHeader.Deserialize(buffer, new PacketHeader());
             Assert.True(result);
             Assert.Equal(packet.Sequence, deserialized?.Sequence);
             Assert.Equal(packet.PacketType, deserialized?.PacketType);
@@ -29,11 +29,11 @@ namespace Racoon.Tests.Serialize
         public void PacketHeaderAbnormalBufferSize()
         {
             var body = new PingPacket(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
-            var packet = new PacketBase(1, body, body.Length, Guid.NewGuid().ToByteArray());
-            var buffer = new byte[PacketBase.HeaderSize + 1];
+            var packet = new PacketHeader(1, body, body.Length, Guid.NewGuid().ToByteArray());
+            var buffer = new byte[PacketHeader.HeaderSize + 1];
             var result = packet.Serialize(buffer, 0);
 
-            var deserialized = PacketBase.Deserialize(buffer, new PacketBase());
+            var deserialized = PacketHeader.Deserialize(buffer, new PacketHeader());
             Assert.True(result);
             Assert.Equal(packet.Sequence, deserialized?.Sequence);
             Assert.Equal(packet.PacketType, deserialized?.PacketType);
@@ -46,11 +46,11 @@ namespace Racoon.Tests.Serialize
         public void PingPacketFitBufferSizeTest()
         {
             var body = new PingPacket(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
-            var packet = new PacketBase(1, body, body.Length, Guid.NewGuid().ToByteArray());
-            var buffer = new byte[PacketBase.HeaderSize];
+            var packet = new PacketHeader(1, body, body.Length, Guid.NewGuid().ToByteArray());
+            var buffer = new byte[PacketHeader.HeaderSize];
             var result = packet.Serialize(buffer, 0);
 
-            var deserialized = PacketBase.Deserialize(buffer, new PacketBase());
+            var deserialized = PacketHeader.Deserialize(buffer, new PacketHeader());
             Assert.True(result);
             Assert.Equal(packet.Sequence, deserialized?.Sequence);
             Assert.Equal(packet.PacketType, deserialized?.PacketType);
