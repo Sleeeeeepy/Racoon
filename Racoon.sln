@@ -12,6 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "솔루션 항목", "솔루�
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Racoon.TestConsoleClient", "Racoon.TestConsoleClient\Racoon.TestConsoleClient.csproj", "{E5202AC2-52BC-43B0-951A-6250BF485C83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Racoon.TestConsoleServer", "Racoon.TestConsoleServer\Racoon.TestConsoleServer.csproj", "{7116EB62-BEB9-4B8C-9931-9DA753F2F98F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +30,14 @@ Global
 		{8847F32A-DB59-4F64-84F6-F72E91F34335}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8847F32A-DB59-4F64-84F6-F72E91F34335}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8847F32A-DB59-4F64-84F6-F72E91F34335}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5202AC2-52BC-43B0-951A-6250BF485C83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5202AC2-52BC-43B0-951A-6250BF485C83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5202AC2-52BC-43B0-951A-6250BF485C83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5202AC2-52BC-43B0-951A-6250BF485C83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7116EB62-BEB9-4B8C-9931-9DA753F2F98F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7116EB62-BEB9-4B8C-9931-9DA753F2F98F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7116EB62-BEB9-4B8C-9931-9DA753F2F98F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7116EB62-BEB9-4B8C-9931-9DA753F2F98F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
