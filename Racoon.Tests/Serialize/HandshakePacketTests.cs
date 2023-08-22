@@ -1,3 +1,5 @@
+using Racoon.Core.Util;
+
 namespace Racoon.Tests.Serialize;
 
 public class HandshakePacketTests
