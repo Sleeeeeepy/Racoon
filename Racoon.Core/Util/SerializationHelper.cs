@@ -17,7 +17,7 @@ public static class SerializationHelper
             return false;
         }
 
-        int packetLength = header.Length + body.Length;
+        int packetLength = PacketHeader.HeaderSize + body.Length;
         if (buffer.Length < packetLength)
         {
             return false;
