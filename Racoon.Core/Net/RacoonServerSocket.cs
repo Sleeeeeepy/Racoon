@@ -112,7 +112,7 @@ namespace Racoon.Core.Net
             var connectionId = identifier.ToHexString();
             if (contexts.ContainsKey(connectionId))
             {
-                Debug.WriteLine($"{connectionId} is alredy connected.");
+                Debug.WriteLine($"{connectionId} is already connected.");
                 return;
             }
 
