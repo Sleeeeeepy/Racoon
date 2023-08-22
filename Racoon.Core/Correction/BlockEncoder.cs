@@ -5,8 +5,8 @@ namespace Racoon.Core.Correction;
 public class BlockEncoder
 {
     private BlockEncoder() { }
-    private const int CODEWORD_SIZE = Rs8.BlockLength;
-    private const int BLOCK_SIZE = Rs8.DataLength;
+    internal const int CODEWORD_SIZE = Rs8.BlockLength;
+    internal const int BLOCK_SIZE = Rs8.DataLength;
 
     public static void Encode(ReadOnlySpan<byte> data, Span<byte> result)
     {
