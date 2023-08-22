@@ -46,14 +46,13 @@ namespace Racoon.Core.Net
         {
             var iv = new byte[16];
             RandomNumberGenerator.Create().GetNonZeroBytes(iv);
-            HandshakePacket packet = new(context.KeyExchange.PublicKey, iv);
-            PacketBase header = new(context.Sequence, packet, packet.Length, Identifier);
-            
-            var buffer = new byte[PacketBase.HeaderSize + 255];
-            int endIndex = PacketBase.HeaderSize + packet.Length;
-            header.Serialize(buffer, 0);
-            packet.Serialize(buffer, PacketBase.HeaderSize);
-            BlockEncoder.Encode(buffer.AsSpan()[PacketBase.HeaderSize..endIndex], buffer.AsSpan()[PacketBase.HeaderSize..]);
+            HandshakePacket body = new(context.KeyExchange.PublicKey, iv);
+            PacketBase header = new(context.Sequence, body, body.Length, Identifier);
+
+            int bufferSize = EncodeHelper.GetBlockSize(header);
+            var buffer = new byte[bufferSize];
+            SerializationHelper.Serialize(buffer, header, body);
+            EncodeHelper.EncodeWithoutHeader(buffer, header);
             udpClient.Send(buffer, context.LastIP, context.LastPort);
 
             var datagram = udpClient.Receive(ref remoteEndpoint);

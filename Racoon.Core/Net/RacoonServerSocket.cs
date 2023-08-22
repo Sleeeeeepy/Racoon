@@ -11,11 +11,11 @@ namespace Racoon.Core.Net
 {
     public class RacoonServerSocket
     {
-        private Dictionary<string, ConnectionContext> contexts;
-        private UdpClient udpClient;
+        private readonly Dictionary<string, ConnectionContext> contexts;
+        private readonly UdpClient udpClient;
         private IPEndPoint remoteEndpoint;
-        private IPacketHandler packetHandler;
-        private byte[] Identifier;
+        private readonly IPacketHandler packetHandler;
+        private readonly byte[] Identifier;
         private bool Closed = false;
 
         public RacoonServerSocket(string ip, int localPort)
@@ -107,7 +107,7 @@ namespace Racoon.Core.Net
             Task.Run(() => handle(datagram));
         }
 
-        private void beginConnection(string ip, int port, byte[] identifier, HandshakePacket packet)
+        private void beginConnection(string ip, int port, byte[] identifier, HandshakePacket receivedPacket)
         {
             var connectionId = identifier.ToHexString();
             if (contexts.ContainsKey(connectionId))
@@ -122,18 +122,17 @@ namespace Racoon.Core.Net
                 LastIP = ip,
                 LastPort = port
             };
-            context.OnConnection(packet.PublicKey, packet.InitializeVector);
+
+            context.OnConnection(receivedPacket.PublicKey, receivedPacket.InitializeVector);
             contexts.Add(context.Identifier, context);
 
-            HandshakePacket sendPacket = new(context.KeyExchange.PublicKey, packet.InitializeVector);
+            HandshakePacket sendPacket = new(context.KeyExchange.PublicKey, receivedPacket.InitializeVector);
             PacketBase header = new(context.Sequence, sendPacket, sendPacket.Length, Identifier);
 
             // TODO: global send buffer 이용하기
-            var buffer = new byte[PacketBase.HeaderSize + 255];
-            int endIndex = PacketBase.HeaderSize + sendPacket.Length;
-            header.Serialize(buffer, 0);
-            sendPacket.Serialize(buffer, PacketBase.HeaderSize);
-            BlockEncoder.Encode(buffer.AsSpan()[PacketBase.HeaderSize..endIndex], buffer.AsSpan()[PacketBase.HeaderSize..]);
+            var buffer = new byte[EncodeHelper.GetBlockSize(header)];
+            SerializationHelper.Serialize(buffer, header, sendPacket);
+            EncodeHelper.EncodeWithoutHeader(buffer, header);
             
             udpClient.Send(buffer, ip, port);
             Debug.WriteLine($"Send conntection data to {connectionId}.");
