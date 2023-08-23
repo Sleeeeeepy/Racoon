@@ -28,11 +28,11 @@ public class NormalPacket : IPacket, ISerializable, IDeserializable<NormalPacket
         try
         {
             return Payload.AsSpan().TryCopyTo(buffer.AsSpan(offset));
-        } 
+        }
         catch (ArgumentOutOfRangeException)
         {
             return false;
-        } 
+        }
         catch (IndexOutOfRangeException)
         {
             return false;

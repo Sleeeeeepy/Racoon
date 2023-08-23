@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using Racoon.Core.Correction;
+using Racoon.Core.Enums;
 using Racoon.Core.Packet;
 using Racoon.Core.Util;
-using Racoon.Core.Enums;
 
 namespace Racoon.Core.Net
 {
@@ -48,7 +43,7 @@ namespace Racoon.Core.Net
             try
             {
                 connect();
-            } 
+            }
             catch (Exception ex)
             {
                 Console.Error.WriteLine(ex);
@@ -80,7 +75,7 @@ namespace Racoon.Core.Net
                 return;
             }
 
-            var recvBody = HandshakePacket.Deserialize(decodedBytes[PacketHeader.HeaderSize..], new());
+            var recvBody = HandshakePacket.Deserialize(decodedBytes, new());
 
             if (recvHeader is null || recvBody is null)
             {

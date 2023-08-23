@@ -5,7 +5,7 @@ namespace Racoon.Tests.Serialize;
 public class NormalPacketTests
 {
     private static RandomNumberGenerator random = RandomNumberGenerator.Create();
-    
+
     [Fact]
     public void NormalPacketSerializeTest()
     {

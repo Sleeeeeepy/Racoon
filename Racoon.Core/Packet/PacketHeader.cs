@@ -64,11 +64,11 @@ public class PacketHeader : ISerializable, IDeserializable<PacketHeader>
             packet.Length = BitConverter.ToInt16(bytes[startIndex..endIndex]);
 
             return packet;
-        } 
+        }
         catch (ArgumentOutOfRangeException)
         {
             return null;
-        } 
+        }
         catch (IndexOutOfRangeException)
         {
             return null;
@@ -85,7 +85,7 @@ public class PacketHeader : ISerializable, IDeserializable<PacketHeader>
             result &= BitConverter.TryWriteBytes(span.Slice(startIndex, 4), this.Sequence);
 
             startIndex += 4;
-            buffer[startIndex] = (byte)this.PacketType; 
+            buffer[startIndex] = (byte)this.PacketType;
 
             startIndex += 1;
             result &= BitConverter.TryWriteBytes(span.Slice(startIndex, 8), this.TotalLength);

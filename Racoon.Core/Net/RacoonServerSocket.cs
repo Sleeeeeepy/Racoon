@@ -1,12 +1,10 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using System.Net.Sockets;
 using Racoon.Core.Correction;
-using Racoon.Core.Packet;
 using Racoon.Core.Enums;
-using System.Diagnostics;
+using Racoon.Core.Packet;
 using Racoon.Core.Util;
-using System.Security.Cryptography;
-using System.Reflection.PortableExecutable;
 
 namespace Racoon.Core.Net
 {
@@ -67,13 +65,12 @@ namespace Racoon.Core.Net
                 if (header.PacketType == PacketType.ConnectionRequest)
                 {
                     body = HandshakePacket.Deserialize(dgram.AsSpan()[PacketHeader.HeaderSize..], new HandshakePacket());
-                    body = null;
                     if (body is null)
                     {
                         sendConnectionRefusal(remoteEndpoint.Address.ToString(), remoteEndpoint.Port, header.Identifier);
                         return;
                     }
-                        
+
                     beginConnection(remoteEndpoint.Address.ToString(), remoteEndpoint.Port, header.Identifier, (HandshakePacket)body);
                     return;
                 }
@@ -142,6 +139,11 @@ namespace Racoon.Core.Net
 
             udpClient.Send(buffer, ip, port);
             Debug.WriteLine($"Send conntection data to {connectionId}.");
+
+            foreach (var b in context.KeyExchange.SharedKey)
+            {
+                Console.Write(b.ToString("X2"));
+            }
         }
 
         private void sendConnectionRefusal(string ip, int port, byte[]? identifier)

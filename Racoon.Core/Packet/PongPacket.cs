@@ -37,9 +37,9 @@ public class PongPacket : IPacket, ISerializable, IDeserializable<PongPacket>
 
             startIndex += 8;
             packet.RemoteHostStatus = (RemoteHostStatus)bytes[startIndex];
-            
+
             return packet;
-        } 
+        }
         catch (ArgumentOutOfRangeException)
         {
             return null;
@@ -64,7 +64,7 @@ public class PongPacket : IPacket, ISerializable, IDeserializable<PongPacket>
             span.Slice(startIndex, 1)[0] = (byte)RemoteHostStatus;
 
             return result;
-        } 
+        }
         catch (ArgumentOutOfRangeException)
         {
             return false;

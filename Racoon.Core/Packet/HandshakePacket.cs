@@ -43,7 +43,7 @@ public class HandshakePacket : IPacket, ISerializable, IDeserializable<Handshake
             packet.InitializeVector = bytes[startIndex..endIndex].ToArray();
 
             return packet;
-        } 
+        }
         catch (ArgumentOutOfRangeException)
         {
             return null;
@@ -69,7 +69,7 @@ public class HandshakePacket : IPacket, ISerializable, IDeserializable<Handshake
             result &= InitializeVector.AsSpan().TryCopyTo(span.Slice(startIndex, InitializeVectorLength));
 
             return result;
-        } 
+        }
         catch (ArgumentOutOfRangeException)
         {
             return false;
